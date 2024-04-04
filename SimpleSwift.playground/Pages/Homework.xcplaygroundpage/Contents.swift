@@ -27,13 +27,148 @@ print("Welcome to the UW Calculator Playground")
 //: For this latter set of operations, it is safe to assume that `["count"]` (with no additional arguments) is 0, `["avg"]` is also 0, and `["fact"]` is 0. `["1", "fact"]` should return 1, and `["0", "fact"]` should also return 1. (Yes, 0-factorial is 1. True story.)
 //: 
 func calculate(_ args: [String]) -> Int {
+    let count = args.count
+    if count == 3 {
+        let left = Int(args[0]) ?? 0
+        let op = args[1]
+        let right = Int(args[2]) ?? 0
+        if op == "+" {
+            print(left + right)
+            return left + right
+        } else if op == "-" {
+            print(left - right)
+            return left - right
+        } else if op == "*" {
+            print(left * right)
+            return left * right
+        } else if op == "/" {
+            if right == 0 {
+                print("Error: cannot be divided by zero!")
+                return -1
+            }
+            print(left / right)
+            return left / right
+        } else if op == "%" {
+            if right == 0 {
+                print("Error: cannot be divided by zero!")
+                return -1
+            }
+            print(left % right)
+            return left % right
+        }
+    }
+    let last = args[count-1]
+    let trueCount = count - 1
+    if trueCount == 0 {
+        return 0
+    }
+    if last == "count" {
+        return trueCount
+    } else if last == "avg" {
+        var sum = 0
+        for i in 0...trueCount-1 {
+            sum += Int(args[i])!
+        }
+        return sum / trueCount
+    } else if last == "fact" {
+        var result = 1
+//        var factNum = Int(args[0])!
+        if let factNum = Int(args[0]) {
+            if factNum == 0 {
+                return result
+            }
+            for i in 1...factNum {
+                result *= i
+            }
+        } else {
+            result = 0
+        }
+
+        return result
+    }
     return -1
 }
 
 func calculate(_ arg: String) -> Int {
-    return -1
+//    let args = arg.components(separatedBy: " ")
+    let args = arg.split(separator: " ").map { String($0) }
+    return calculate(args)
 }
 
+
+//func calculate(_ exp : [String]) -> Int? {
+//    var lastElem = exp[exp.count - 1]
+//    var result = 0
+//    switch lastElem {
+//    case "count": 
+//        result = exp.count - 1
+//    case "avg":
+//        var sum = 0
+//        for x in 0...exp.count-1 {
+//            sum += Int(exp[x])!
+//        }
+//        result = sum / exp.count-1
+//    case "fact":
+//        for x in 0...exp.count-1 {
+//            result *= Int(exp[x])!
+//        }
+//    default:
+//        let op = exp[1]
+//        switch op {
+//        case "+": result = Int(exp[0])! + Int(exp[2])!
+//        case "-": result = Int(exp[0])! - Int(exp[2])!
+//        case "*": result = Int(exp[0])! * Int(exp[2])!
+//        case "/": 
+//            if Int(exp[2])! == 0 {
+//                print("cannot divide by zero!")
+//            }
+//            result = Int(exp[0])! / Int(exp[2])!
+//        case "%":
+//            if Int(exp[2])! == 0 {
+//                print("cannot divide by zero!")
+//            }
+//            result = Int(exp[0])! % Int(exp[2])!
+//        default:
+//            print("cannot recognize operator!")
+//        }
+//    }
+//    return result
+//}
+
+//func calculate(_ exp : [String]) -> Int? {
+//    var result = 0
+//    let count = exp.count
+//    if count == 3 {
+//        let left = Int(exp[0]) ?? 0
+//        let op = exp[1]
+//        let right = Int(exp[2]) ?? 0
+//        if op == "+" {
+//            print(left + right)
+//            return left + right
+//        } else if op == "-" {
+//            print(left - right)
+//            return left - right
+//        } else if op == "*" {
+//            print(left * right)
+//            return left * right
+//        } else if op == "/" {
+//            if right == 0 {
+//                print("cannot be divided by zero!")
+//                return nil
+//            }
+//            print(left / right)
+//            return left / right
+//        } else if op == "%" {
+//            if right == 0 {
+//                print("cannot be divided by zero!")
+//                return nil
+//            }
+//            print(left % right)
+//            return left % right
+//        }
+//    }
+//    return result
+//}
 //: Below this are the test expressions/calls to verify if your code is correct.
 //:
 //: ***DO NOT MODIFY ANYTHING BELOW THIS***
@@ -41,6 +176,7 @@ func calculate(_ arg: String) -> Int {
 //: All of these expressions should return true
 //: if you have implemented `calculate()` correctly
 //
+
 calculate(["2", "+", "2"]) == 4
 calculate(["4", "+", "4"]) == 8
 calculate(["2", "-", "2"]) == 0
@@ -75,7 +211,6 @@ calculate("2 / 2") == 1
 calculate("1 2 3 4 5 count") == 5
 calculate("1 2 3 4 5 avg") == 3
 calculate("5 fact") == 120
-
 //: -------------------------------------------
 //: These are extra credit tests; they are commented out 
 //: so that they do not conflict with you work until you 
